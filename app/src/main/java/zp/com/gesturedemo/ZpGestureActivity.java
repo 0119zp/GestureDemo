@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.animation.Animation;
+import android.view.animation.TranslateAnimation;
 import android.widget.TextView;
 
 
@@ -16,6 +18,7 @@ public class ZpGestureActivity extends Activity{
     private GestureLockView gestureLockView;
     private TextView errText;
     private boolean isShow;
+    private TranslateAnimation animation;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,6 +38,12 @@ public class ZpGestureActivity extends Activity{
         gestureLockView.setLimitNum(5);
         gestureLockView.setIsGone(isShow);
 
+        // 错误提示动画
+        animation = new TranslateAnimation(-30, 30, 0, 0);
+        animation.setDuration(50);
+        animation.setRepeatCount(3);
+        animation.setRepeatMode(Animation.REVERSE);
+
         gestureLockView.setOnGestureFinishListener(new GestureLockView.OnGestureFinishListener() {
             @Override
             public void OnGestureFinish(boolean success, String key, String adapterNum) {
@@ -47,6 +56,7 @@ public class ZpGestureActivity extends Activity{
 
                     verificaCancleBack();
                     errText.setText("需大于4个点 = " + key);
+                    errText.startAnimation(animation);
                 }
             }
         });
